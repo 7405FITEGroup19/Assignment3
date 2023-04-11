@@ -10,6 +10,7 @@ Original file is located at
 """
 A graphical user interface for users to easily price various options with your pricer.
 """
+
 from American_option_pricer import american_option
 from Arithmetic_Asian_option_pricer import arithmetic_asia_option
 from Arithmetic_basket_option_pricer import arithmetic_bascket_option
@@ -17,95 +18,126 @@ from European_Option_Black_Scholes_Formulas import black_scholes
 from Geometric_Asian_option_pricer import geometric_asia_option
 from Geometric_basket_option_pricer import geometric_bascket_option
 from Implied_volatility import vega, Newton_Raphson4Ivolatility
-from KIKO_Put_Option_Quasi-Monte_Carlo import Quasi_Monte_Carlo
+from KIKO_Put_Option_Quasi_Monte_Carlo import Quasi_Monte_Carlo
 
 from tkinter import *
-from tkinter import ttk
-from tkinter import scrolledtext
+from tkinter import ttk, scrolledtext
 import tkinter.font as tkFont
 import math
 
 
-class Application:
-    
+# class GUI:
+#     import tkinter as tk
+#
+#
+# from tkinter import Tk, Frame, Menu, Label
+# import tkinter.font as tkFont
+
+
+class OptionPricerGUI:
+
     def __init__(self):
-        
-        self.window = Tk()
-        self.window.title("Mini Option Pricer")
-        self.window.geometry('%dx%d' % (560, 320))
-        self.menubar = Menu(self.window)
+        self.create_main_window()
+        self.create_frames()
+        self.create_menu()
 
-        self.__createPage()
-        self.__HomePage()
-        self.__createMenu()
+        self.show_home_page()
 
-        self.window.config(menu=self.menubar)
-        
-        # Place frameHomePage into the window
-        self.__forgetFrame()
-        self.frameHomePage.pack()  
-        
-        # design the homepage
-        ft = tkFont.Font(size = 23, weight = tkFont.BOLD)
-        Label(self.frameHomePage, text = "Mini Option Pricer", font = ft,  fg = "grey", height = 11).pack()
-        Label(self.frameHomePage, text = "Authors: Wu Yufan, Zhang Jingya, Zhao Mingyang").pack()
         self.window.mainloop()
 
-    def __createPage(self):
-        
-        self.frame1 = Frame(self.window)
-        self.frame2 = Frame(self.window)
-        self.frame3 = Frame(self.window)
-        self.frame4 = Frame(self.window)
-        self.frame5 = Frame(self.window)
-        self.frame6 = Frame(self.window)
-        self.frame7 = Frame(self.window)
-        self.frame8 = Frame(self.window)
-        self.frameHomePage = Frame(self.window) 
+    def create_main_window(self):
+        self.window = Tk()
+        self.window.title("Option Pricer")
+        self.window.geometry('720x460')
+        self.menu_bar = Menu(self.window)
 
-    def __HomePage(self):
-        
-        homepage = Menu(self.menubar, tearoff=0)
-        homepage.add_command(label = "Homepage", command=self.run_homepage)
-        homepage.add_command(label = "Quit", command = self.Quit)
-        self.menubar.add_cascade(label = 'Homepage', menu = homepage)
+    def create_frames(self):
+        self.frames = {
+            'home': Frame(self.window),
+            'pricer1': Frame(self.window),
+            'pricer2': Frame(self.window),
+            'pricer3': Frame(self.window),
+            'pricer4': Frame(self.window),
+            'pricer5': Frame(self.window),
+            'pricer6': Frame(self.window),
+            'pricer7': Frame(self.window),
+            'pricer8': Frame(self.window),
+        }
 
-    def __createMenu(self):
-        
-        filemenu = Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label='Select Pricer Model', menu=filemenu)
-        filemenu.add_command(label = "Pricer 1: European Options - Black-Scholes Formulas", command=self.task1)
-        filemenu.add_command(label = "Pricer 2: Implied Volatility - European Options", command=self.task2)
-        filemenu.add_command(label = "Pricer 3: Geometric Asian Options - Closed-Form Formula", command=self.task3)
-        filemenu.add_command(label = "Pricer 4: Geometric Basket Options - Closed-Form Formula", command=self.task4)
-        filemenu.add_command(label = "Pricer 5: Arithmetic Asian Options - Monte Carlo Method", command=self.task5)
-        filemenu.add_command(label = "Pricer 6: Arithmetic Mean Basket Options - Monte Carlo Method", command=self.task6)
-        filemenu.add_command(label = "Pricer 7: American Options - Binomial Tree Method", command=self.task7)
-        filemenu.add_command(label = "Pricer 8: KIKO-put option - Quasi-Monte Carlo method", command=self.task8)
+    def create_menu(self):
+        self.create_homepage_menu()
+        self.create_pricer_menu()
+        self.window.config(menu=self.menu_bar)
 
+    def create_homepage_menu(self):
+        homepage_menu = Menu(self.menu_bar, tearoff=0)
+        homepage_menu.add_command(label="Homepage", command=self.show_home_page)
+        homepage_menu.add_command(label="Quit", command=self.quit_application)
+        self.menu_bar.add_cascade(label='Homepage', menu=homepage_menu)
 
+    def create_pricer_menu(self):
+        pricer_menu = Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label='Select Pricer Model', menu=pricer_menu)
+
+        pricer_menu.add_command(label="Pricer 1: European Options - Black-Scholes Formulas",
+                                command=self.task1)
+        pricer_menu.add_command(label="Pricer 2: Implied Volatility - European Options",
+                                command=self.task2)
+        pricer_menu.add_command(label="Pricer 3: Geometric Asian Options - Closed-Form Formulas",
+                                command=self.task3)
+        pricer_menu.add_command(label="Pricer 4: Geometric Basket Options - Closed-Form Formulas",
+                                command=self.task4)
+        pricer_menu.add_command(label="Pricer 5: Arithmetic Asian Options - Monte Carlo Method",
+                                command=self.task5)
+        pricer_menu.add_command(label="Pricer 6: Arithmetic Mean Basket Options - Monte Carlo Method",
+                                command=self.task6)
+        pricer_menu.add_command(label="Pricer 7: KIKO-put option - Quasi-Monte Carlo method",
+                                command=self.task8)
+        pricer_menu.add_command(label="Pricer 8: American Options - Binomial Tree Method",
+                                command=self.task7)
+
+    def show_home_page(self):
+        self.hide_all_frames()
+        self.frames['home'].pack()
+
+        ft1 = tkFont.Font(size=29)
+        Label(self.frames['home'], text="Option Pricer", font=ft1, fg="grey", height=11).pack()
+        ft2 = tkFont.Font(size=12)
+        Label(self.frames['home'], text="Authors: Wu Yufan, Zhang Jingya, Zhao Mingyang", font=ft2, fg="grey",
+              height=11).pack()
+
+    def quit_application(self):
+        self.window.destroy()
+
+    def hide_all_frames(self):
+        for frame in self.frames.values():
+            frame.pack_forget()
+
+    def show_frame(self, frame_key):
+        self.hide_all_frames()
+        self.frames[frame_key].pack()
 
     # For switching page, forget the current page and jump to another page
     def __forgetFrame(self):
         
-        self.frame1.pack_forget()
-        self.frame2.pack_forget()
-        self.frame3.pack_forget()
-        self.frame4.pack_forget()
-        self.frame5.pack_forget()
-        self.frame6.pack_forget()
-        self.frame7.pack_forget()
-        self.frame8.pack_forget()
-        self.frameHomePage.pack_forget()
+        self.frames['pricer1'].pack_forget()
+        self.frames['pricer2'].pack_forget()
+        self.frames['pricer3'].pack_forget()
+        self.frames['pricer4'].pack_forget()
+        self.frames['pricer5'].pack_forget()
+        self.frames['pricer6'].pack_forget()
+        self.frames['pricer7'].pack_forget()
+        self.frames['pricer8'].pack_forget()
 
-    # Implement Black-Scholes Formulas for European call/put option.
+        self.frames['home'].pack_forget()
+
+    # Black-Scholes Formulas for European call/put option.
     def task1(self):
         
         self.__forgetFrame()
-        frame = self.frame1
-        frame.pack()  # Place frame1 into the window
-        
-        # define labels
+        frame = self.frames['pricer1']
+        frame.pack()
+
         label_title = Label(frame, text = "Implement Black-Scholes Formulas for European Call/Put Options.", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
         label_sigma = Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
@@ -123,7 +155,7 @@ class Application:
         self.K = DoubleVar()
         self.option_type = StringVar()
         
-        # define input boxes for input variables
+
         entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
         entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
         entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
@@ -131,29 +163,27 @@ class Application:
         entry_T = Entry(frame, textvariable = self.T).grid(row = 6, column = 2, sticky = W)
         entry_K = Entry(frame, textvariable = self.K).grid(row = 7, column = 2, sticky = W)
         
-        # define the list for user to select option type
+
         self.comboboxlist_task1 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task1)  
-        self.comboboxlist_task1.current(0) # set the default selection
+        self.comboboxlist_task1.current(0)
         self.comboboxlist_task1.grid(row = 8, column = 2, sticky = W)
-        
-        # Reset input and log
+
         btReset = Button(frame, width = 10, text = "Reset", command = self.ResetTask1).grid(row = 10, column = 2, columnspan = 1, sticky = E)
         
-        # define run button to run the pricer
+
         btRun = Button(frame, width = 10, text = "Run", command = self.run_task1).grid(row = 10, column = 2, columnspan = 1, sticky = W)
         
-        # define a window to display result
+
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 11, column = 1, rowspan = 4, columnspan = 2, sticky = W)
         
-    # Implied volatility calculations.    
+    # Implied volatility
     def task2(self):
         
         self.__forgetFrame()
-        frame = self.frame2
-        frame.pack()  # Place frame2 into the window
-        
-        # define labels
+        frame = self.frames['pricer2']
+        frame.pack()
+
         label_title = Label(frame, text = "Implied Volatility Calculator for European Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
         label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 3, column = 1, sticky = W)
@@ -171,7 +201,7 @@ class Application:
         self.V = DoubleVar()
         self.option_type = StringVar()
         
-        # define input boxes for input variables
+
         entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
         entry_r = Entry(frame, textvariable = self.r).grid(row = 3, column = 2, sticky = E)
         entry_q = Entry(frame, textvariable = self.q).grid(row = 4, column = 2, sticky = E)
@@ -179,29 +209,28 @@ class Application:
         entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
         entry_V = Entry(frame, textvariable = self.V).grid(row = 7, column = 2, sticky = E)
         
-        # define the list for user to select option type
+
         self.comboboxlist_task2 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task2)  
-        self.comboboxlist_task2.current(0) # set the default Option Type
+        self.comboboxlist_task2.current(0)
         self.comboboxlist_task2.grid(row = 8, column = 2, sticky = E)
         
-        # Reset input and log
+
         btReset = Button(frame, width = 23, text = "Reset", command = self.ResetTask2).grid(row = 9, column = 1, columnspan = 1, sticky = E)
         
-        # define run button to run the pricer
+
         btRun = Button(frame, width = 23, text = "Run", command = self.run_task2).grid(row = 9, column = 1, columnspan = 1, sticky = W)
         
-        # define a window to display result
+
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
         
-    # Implement closed-form formulas for geometric Asian call/put option.    
+    # closed-form formulas for geometric Asian call/put option.
     def task3(self):
         
         self.__forgetFrame()
-        frame = self.frame3
-        frame.pack()  # Place frame3 into the window
-        
-        # define labels
+        frame = self.frames['pricer3']
+        frame.pack()
+
         label_title = Label(frame, text = "Implement Closed-form Formulas for Geometric Asian Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
         label_sigma = Label(frame, text = "Implied Volatility:").grid(row = 3, column = 1, sticky = W)
@@ -219,8 +248,8 @@ class Application:
         self.K = DoubleVar()
         self.n = IntVar()
         self.option_type = StringVar()
-        
-        # define input boxes for input variables
+
+
         entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
         entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = E)
         entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = E)
@@ -228,29 +257,25 @@ class Application:
         entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
         entry_n = Entry(frame, textvariable = self.n).grid(row = 7, column = 2, sticky = E)
         
-        # define the list for user to select option type
+
         self.comboboxlist_task3 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task3)  
-        self.comboboxlist_task3.current(0) # set the default Option Type
+        self.comboboxlist_task3.current(0)
         self.comboboxlist_task3.grid(row = 8, column = 2, sticky = E)
-        
-        # Reset input and log
+
         btReset = Button(frame, width = 29, text = "Reset", command = self.ResetTask3).grid(row = 9, column = 1, columnspan = 1, sticky = E)
-        
-        # define run button to run the pricer
+
         btRun = Button(frame, width = 29, text = "Run", command = self.run_task3).grid(row = 9, column = 1, columnspan = 1, sticky = W)
-        
-        # define a window to display result
+
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
     
-    # Implement closed-form formulas for geometric basket call/put options.
+
     def task4(self):
         
         self.__forgetFrame()
-        frame = self.frame4
-        frame.pack()  # Place frame4 into the window
-        
-        # define labels
+        frame = self.frames['pricer4']
+        frame.pack()
+
         label_title = Label(frame, text = "Implement Closed-form Formulas for Geometric Basket Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0_1 = Label(frame, text = "Spot Price of Asset 1:").grid(row = 2, column = 1, sticky = W)
         label_s0_2 = Label(frame, text = "Spot Price of Asset 2:").grid(row = 3, column = 1, sticky = W)
@@ -272,7 +297,7 @@ class Application:
         self.rho = DoubleVar()
         self.option_type = StringVar()
         
-        # define input boxes for input variables
+
         entry_s0_1 = Entry(frame, textvariable = self.s0_1).grid(row = 2, column = 2, sticky = E)
         entry_s0_2 = Entry(frame, textvariable = self.s0_2).grid(row = 3, column = 2, sticky = E)
         entry_sigma_1 = Entry(frame, textvariable = self.sigma_1).grid(row = 4, column = 2, sticky = E)
@@ -282,27 +307,27 @@ class Application:
         entry_K = Entry(frame, textvariable = self.K).grid(row = 8, column = 2, sticky = E)
         entry_rho = Entry(frame, textvariable = self.rho).grid(row = 9, column = 2, sticky = E)
         
-        # define the list for user to select option type
+
         self.comboboxlist_task4 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task4)  
-        self.comboboxlist_task4.current(0) # set the default Option Type
+        self.comboboxlist_task4.current(0)
         self.comboboxlist_task4.grid(row = 10, column = 2, sticky = E)
         
-        # Reset input and log
+
         btReset = Button(frame, width = 29, text = "Reset", command = self.ResetTask4).grid(row = 11, column = 1, columnspan = 1, sticky = E)
         
-        # define run button to run the pricer
+
         btRun = Button(frame, width = 29, text = "Run", command = self.run_task4).grid(row = 11, column = 1, columnspan = 1, sticky = W)
         
-        # define a window to display result
+
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 9)
         self.logs.grid(row = 12, column = 1, rowspan = 4, columnspan = 2, sticky = W)
     
-    # Implement the Monte Carlo method with control variate technique for Arithmetic Asian call/put options.
+
     def task5(self):
         
-        frame = self.frame5
+        frame = self.frames['pricer5']
         self.__forgetFrame()
-        frame.pack()  # Place frame5 into within the window
+        frame.pack()
 
         label_title = Label(frame, text = "Arithmetic Asian Option from MC", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0 = Label(frame, text="S0").grid(row=2, column=1, sticky=E)
@@ -341,10 +366,10 @@ class Application:
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 16)
         self.logs.grid(row=8, column=1, columnspan=4)
         
-    # Implement the Monte Carlo method with control variate technique for Arithmetric Mean Basket call/put options. (for the case a basket with two assets)
+
     def task6(self):
         
-        frame = self.frame6
+        frame = self.frames['pricer6']
         self.__forgetFrame()
         frame.pack()
 
@@ -391,14 +416,14 @@ class Application:
         self.logs = scrolledtext.ScrolledText(frame, height=14)
         self.logs.grid(row=9, column=1, columnspan=4)
         
-    # The Binomial Tree method for American call/put options.
+
     def task7(self):
         
-        frame = self.frame7
+        frame = self.frames['pricer7']
         self.__forgetFrame()
         frame.pack()
         
-        # define labels
+
         label_title = Label(frame, text = "Implement the Binomial Tree Method for American Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
         label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
         label_sigma = Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
@@ -416,7 +441,7 @@ class Application:
         self.N = IntVar()
         self.option_type = StringVar()
         
-        # define input boxes for input variables
+
         entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
         entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
         entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
@@ -424,25 +449,25 @@ class Application:
         entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = W)
         entry_N = Entry(frame, textvariable = self.N).grid(row = 7, column = 2, sticky = W)
         
-        # define the list for user to select option type
+
         self.comboboxlist_task7 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task7)  
-        self.comboboxlist_task7.current(0) # set the default selection
+        self.comboboxlist_task7.current(0)
         self.comboboxlist_task7.grid(row = 8, column = 2, sticky = W)
         
-        # Reset input and log
+
         btReset = Button(frame, width = 10, text = "Reset", command = self.ResetTask7).grid(row = 9, column = 2, columnspan = 1, sticky = E)
         
-        # define run button to run the pricer
+
         btRun = Button(frame, width = 10, text = "Run", command = self.run_task7).grid(row = 9, column = 2, columnspan = 1, sticky = W)
         
-        # define a window to display result
+
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
 
-    # Implement the Monte Carlo method for for a KIKO-put option.
+    # Implement the Quasi Monte Carlo method for for a KIKO-put option.
     def task8(self):
         
-        frame = self.frame6
+        frame = self.frames['pricer6']
         self.__forgetFrame()
         frame.pack()
 
@@ -485,7 +510,7 @@ class Application:
     def run_homepage(self):
         
         self.__forgetFrame()
-        self.frameHomePage.pack()
+        self.frames['home'].pack()
         
     def run_task1(self):
         
@@ -650,7 +675,7 @@ class Application:
   
                 result = geometric_bascket_option(S1 = self.s0_1.get(), S2 = self.s0_2.get(), 
                                           sigma1 = self.sigma_1.get(), sigma2 = self.sigma_2.get(), 
-                                          r = self.r.get(), T = self.T.get(), K = self.K.get(), rho = self.rho.get(), option_type == 'call')
+                                          r = self.r.get(), T = self.T.get(), K = self.K.get(), rho = self.rho.get(), option_type = 'call')
           
                 
                 if math.isnan(result) or math.isinf(result):
@@ -671,7 +696,7 @@ class Application:
             
                 result = geometric_bascket_option(S1 = self.s0_1.get(), S2 = self.s0_2.get(), 
                                           sigma1 = self.sigma_1.get(), sigma2 = self.sigma_2.get(), 
-                                          r = self.r.get(), T = self.T.get(), K = self.K.get(), rho = self.rho.get(), option_type == 'put')
+                                          r = self.r.get(), T = self.T.get(), K = self.K.get(), rho = self.rho.get(), option_type = 'put')
                 
                 if math.isnan(result) or math.isinf(result):
                     
@@ -779,4 +804,4 @@ class Application:
 
 if __name__ == '__main__':
     
-    Application()
+    OptionPricerGUI()
