@@ -50,9 +50,9 @@ def Newton_Raphson4Ivolatility(C_true, S, K, T, r, q, call=True, boundary = True
         sigma = None
     return sigma
 
-print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0, call=True))
-print(Newton_Raphson4Ivolatility(10, 100, 80, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 120, 0.5, 0.01, 0, call=True))
-print(Newton_Raphson4Ivolatility(10, 100, 100, 1, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 1, 0.01, 0, call=True))
-print(Newton_Raphson4Ivolatility(20, 100, 100, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(20, 100, 100, 0.5, 0.01, 0, call=True))
-print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.02, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.02, 0, call=True))
-print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0.1, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0.1, call=True))
+# print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0, call=True))
+# print(Newton_Raphson4Ivolatility(10, 100, 80, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 120, 0.5, 0.01, 0, call=True))
+# print(Newton_Raphson4Ivolatility(10, 100, 100, 1, 0.01, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 1, 0.01, 0, call=True))
+# print(Newton_Raphson4Ivolatility(20, 100, 100, 0.5, 0.01, 0, call=False), Newton_Raphson4Ivolatility(20, 100, 100, 0.5, 0.01, 0, call=True))
+# print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.02, 0, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.02, 0, call=True))
+# print(Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0.1, call=False), Newton_Raphson4Ivolatility(10, 100, 100, 0.5, 0.01, 0.1, call=True))
