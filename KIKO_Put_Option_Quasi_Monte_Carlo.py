@@ -32,10 +32,8 @@ def Quasi_Monte_Carlo(S, K, T, r, sigma, N, R, barrier_lower, barrier_upper, is_
     df_samples_cumsum = df_samples.cumsum(axis=1)
 
 
-
-
     # the simulated stock prices, M rows, N columns
-    df_stocks = s * np.exp(df_samples_cumsum)
+    df_stocks = S * np.exp(df_samples_cumsum)
     for ipath in df_stocks.index.to_list():
         ds_path_local = df_stocks.loc[ipath, :]
         price_max = ds_path_local.max()

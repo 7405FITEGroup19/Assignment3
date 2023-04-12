@@ -26,13 +26,6 @@ import tkinter.font as tkFont
 import math
 
 
-# class GUI:
-#     import tkinter as tk
-#
-#
-# from tkinter import Tk, Frame, Menu, Label
-# import tkinter.font as tkFont
-
 
 class OptionPricerGUI:
 
@@ -117,399 +110,450 @@ class OptionPricerGUI:
         self.hide_all_frames()
         self.frames[frame_key].pack()
 
-    # For switching page, forget the current page and jump to another page
-    def __forgetFrame(self):
-        
-        self.frames['pricer1'].pack_forget()
-        self.frames['pricer2'].pack_forget()
-        self.frames['pricer3'].pack_forget()
-        self.frames['pricer4'].pack_forget()
-        self.frames['pricer5'].pack_forget()
-        self.frames['pricer6'].pack_forget()
-        self.frames['pricer7'].pack_forget()
-        self.frames['pricer8'].pack_forget()
-
-        self.frames['home'].pack_forget()
-
     # Black-Scholes Formulas for European call/put option.
     def task1(self):
-        
-        self.__forgetFrame()
+
+        self.hide_all_frames()
         frame = self.frames['pricer1']
         frame.pack()
 
-        label_title = Label(frame, text = "Implement Black-Scholes Formulas for European Call/Put Options.", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
-        label_sigma = Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
-        label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
-        label_repo = Label(frame, text = "Repo Rate:").grid(row = 5, column = 1, sticky = W)
-        label_T = Label(frame, text = "Time to Maturity (in years):").grid(row = 6, column = 1, sticky = W)
-        label_K = Label(frame, text = "Strike:").grid(row = 7, column = 1, sticky = W)
-        label_OptionType = Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
-        
+        Label(frame, text = " Black-Scholes Formulas for European Call/Put Options.", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
+        Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
+        Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
+        Label(frame, text = "Repo Rate:").grid(row = 5, column = 1, sticky = W)
+        Label(frame, text = "Time to Maturity (in years):").grid(row = 6, column = 1, sticky = W)
+        Label(frame, text = "Strike:").grid(row = 7, column = 1, sticky = W)
+        Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
+
         self.s0 = DoubleVar()
+        self.s0.set(100)
         self.sigma = DoubleVar()
+        self.sigma.set(0.2)
         self.r = DoubleVar()
+        self.r.set(0.01)
         self.repo = DoubleVar()
+        self.repo.set(0.0)
         self.T = DoubleVar()
+        self.T.set(0.5)
         self.K = DoubleVar()
+        self.K.set(100)
         self.option_type = StringVar()
-        
 
-        entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
-        entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
-        entry_repo = Entry(frame, textvariable = self.repo).grid(row = 5, column = 2, sticky = W)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 6, column = 2, sticky = W)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 7, column = 2, sticky = W)
-        
 
-        self.comboboxlist_task1 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task1)  
-        self.comboboxlist_task1.current(0)
-        self.comboboxlist_task1.grid(row = 8, column = 2, sticky = W)
+        Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
+        Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
+        Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
+        Entry(frame, textvariable = self.repo).grid(row = 5, column = 2, sticky = W)
+        Entry(frame, textvariable = self.T).grid(row = 6, column = 2, sticky = W)
+        Entry(frame, textvariable = self.K).grid(row = 7, column = 2, sticky = W)
 
-        btReset = Button(frame, width = 10, text = "Reset", command = self.ResetTask1).grid(row = 10, column = 2, columnspan = 1, sticky = E)
-        
 
-        btRun = Button(frame, width = 10, text = "Run", command = self.run_task1).grid(row = 10, column = 2, columnspan = 1, sticky = W)
-        
+        self.option_type_selector = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task1)
+        self.option_type_selector.current(0)
+        self.option_type_selector.grid(row = 8, column = 2, sticky = W)
+
+        Button(frame, width = 10, text = "Reset", command = self.reset_task1).grid(row = 10, column = 2, columnspan = 1, sticky = E)
+
+
+        Button(frame, width = 10, text = "Run", command = self.run_task1).grid(row = 10, column = 2, columnspan = 1, sticky = W)
+
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 11, column = 1, rowspan = 4, columnspan = 2, sticky = W)
-        
+
     # Implied volatility
     def task2(self):
-        
-        self.__forgetFrame()
+
+        self.hide_all_frames()
         frame = self.frames['pricer2']
         frame.pack()
 
-        label_title = Label(frame, text = "Implied Volatility Calculator for European Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
-        label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 3, column = 1, sticky = W)
-        label_q = Label(frame, text = "Repo Rate:").grid(row = 4, column = 1, sticky = W)
-        label_T = Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
-        label_K = Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
-        label_V = Label(frame, text = "Option Premium:").grid(row = 7, column = 1, sticky = W)
-        label_OptionType = Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
-        
+        Label(frame, text = "Implied Volatility Calculator for European Options", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
+        Label(frame, text = "Risk-free Interest Rate:").grid(row = 3, column = 1, sticky = W)
+        Label(frame, text = "Repo Rate:").grid(row = 4, column = 1, sticky = W)
+        Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
+        Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
+        Label(frame, text = "Option Premium:").grid(row = 7, column = 1, sticky = W)
+        Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
+
         self.s0 = DoubleVar()
+        self.s0.set(100)
         self.r = DoubleVar()
+        self.r.set(0.01)
         self.q = DoubleVar()
+        self.q.set(0)
         self.T = DoubleVar()
+        self.T.set(0.5)
         self.K = DoubleVar()
-        self.V = DoubleVar()
+        self.K.set(100)
+        self.OP = DoubleVar()
+        self.OP.set(10)
         self.option_type = StringVar()
-        
 
-        entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 3, column = 2, sticky = E)
-        entry_q = Entry(frame, textvariable = self.q).grid(row = 4, column = 2, sticky = E)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
-        entry_V = Entry(frame, textvariable = self.V).grid(row = 7, column = 2, sticky = E)
-        
 
-        self.comboboxlist_task2 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task2)  
-        self.comboboxlist_task2.current(0)
-        self.comboboxlist_task2.grid(row = 8, column = 2, sticky = E)
-        
+        Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
+        Entry(frame, textvariable = self.r).grid(row = 3, column = 2, sticky = E)
+        Entry(frame, textvariable = self.q).grid(row = 4, column = 2, sticky = E)
+        Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
+        Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
+        Entry(frame, textvariable = self.OP).grid(row = 7, column = 2, sticky = E)
 
-        btReset = Button(frame, width = 23, text = "Reset", command = self.ResetTask2).grid(row = 9, column = 1, columnspan = 1, sticky = E)
-        
 
-        btRun = Button(frame, width = 23, text = "Run", command = self.run_task2).grid(row = 9, column = 1, columnspan = 1, sticky = W)
-        
+        self.option_type_selector = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task2)
+        self.option_type_selector.current(0)
+        self.option_type_selector.grid(row = 8, column = 2, sticky = E)
+
+
+        Button(frame, width = 23, text = "Reset", command = self.reset_task2).grid(row = 9, column = 1, columnspan = 1, sticky = E)
+
+
+        Button(frame, width = 23, text = "Run", command = self.run_task2).grid(row = 9, column = 1, columnspan = 1, sticky = W)
+
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
-        
+
     # closed-form formulas for geometric Asian call/put option.
     def task3(self):
-        
-        self.__forgetFrame()
+
+        self.hide_all_frames()
         frame = self.frames['pricer3']
         frame.pack()
 
-        label_title = Label(frame, text = "Implement Closed-form Formulas for Geometric Asian Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
-        label_sigma = Label(frame, text = "Implied Volatility:").grid(row = 3, column = 1, sticky = W)
-        label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
-        label_T = Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
-        label_K = Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
-        label_n = Label(frame, text = "Observation Times for the Geometric Average:").grid(row = 7, column = 1, sticky = W)
-        label_OptionType = Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
-        
+        Label(frame, text = " Closed-form Formulas for Geometric Asian Call/Put Options", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
+        Label(frame, text = "Implied Volatility:").grid(row = 3, column = 1, sticky = W)
+        Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
+        Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
+        Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
+        Label(frame, text = "Observation Times for the Geometric Average:").grid(row = 7, column = 1, sticky = W)
+        Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
+
         self.s0 = DoubleVar()
+        self.s0.set(100)
         self.sigma = DoubleVar()
+        self.sigma.set(0.3)
         self.r = DoubleVar()
-        self.q = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
+        self.T.set(3)
         self.K = DoubleVar()
+        self.K.set(100)
         self.n = IntVar()
+        self.n.set(50)
         self.option_type = StringVar()
 
 
-        entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
-        entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = E)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = E)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
-        entry_n = Entry(frame, textvariable = self.n).grid(row = 7, column = 2, sticky = E)
-        
+        Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = E)
+        Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = E)
+        Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = E)
+        Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
+        Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
+        Entry(frame, textvariable = self.n).grid(row = 7, column = 2, sticky = E)
 
-        self.comboboxlist_task3 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task3)  
-        self.comboboxlist_task3.current(0)
-        self.comboboxlist_task3.grid(row = 8, column = 2, sticky = E)
 
-        btReset = Button(frame, width = 29, text = "Reset", command = self.ResetTask3).grid(row = 9, column = 1, columnspan = 1, sticky = E)
+        self.option_type_selector = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task3)
+        self.option_type_selector.current(0)
+        self.option_type_selector.grid(row = 8, column = 2, sticky = E)
 
-        btRun = Button(frame, width = 29, text = "Run", command = self.run_task3).grid(row = 9, column = 1, columnspan = 1, sticky = W)
+        Button(frame, width = 29, text = "Reset", command = self.reset_task3).grid(row = 9, column = 1, columnspan = 1, sticky = E)
+
+        Button(frame, width = 29, text = "Run", command = self.run_task3).grid(row = 9, column = 1, columnspan = 1, sticky = W)
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
-    
+
 
     def task4(self):
-        
-        self.__forgetFrame()
+
+        self.hide_all_frames()
         frame = self.frames['pricer4']
         frame.pack()
 
-        label_title = Label(frame, text = "Implement Closed-form Formulas for Geometric Basket Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0_1 = Label(frame, text = "Spot Price of Asset 1:").grid(row = 2, column = 1, sticky = W)
-        label_s0_2 = Label(frame, text = "Spot Price of Asset 2:").grid(row = 3, column = 1, sticky = W)
-        label_sigma_1 = Label(frame, text = "Volatility of Asset 1:").grid(row = 4, column = 1, sticky = W)
-        label_sigma_2 = Label(frame, text = "Volatility of Asset 2:").grid(row = 5, column = 1, sticky = W)
-        label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 6, column = 1, sticky = W)
-        label_T = Label(frame, text = "Time to Maturity (in year):").grid(row = 7, column = 1, sticky = W)
-        label_K = Label(frame, text = "Strike:").grid(row = 8, column = 1, sticky = W)
-        label_rho = Label(frame, text = "Correlation:").grid(row = 9, column = 1, sticky = W)
-        label_OptionType = Label(frame, text = "Option Type:").grid(row = 10, column = 1, sticky = W)
-        
+        Label(frame, text = " Closed-form Formulas for Geometric Basket Call/Put Options", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text = "Spot Price of Asset 1:").grid(row = 2, column = 1, sticky = W)
+        Label(frame, text = "Spot Price of Asset 2:").grid(row = 3, column = 1, sticky = W)
+        Label(frame, text = "Volatility of Asset 1:").grid(row = 4, column = 1, sticky = W)
+        Label(frame, text = "Volatility of Asset 2:").grid(row = 5, column = 1, sticky = W)
+        Label(frame, text = "Risk-free Interest Rate:").grid(row = 6, column = 1, sticky = W)
+        Label(frame, text = "Time to Maturity (in year):").grid(row = 7, column = 1, sticky = W)
+        Label(frame, text = "Strike:").grid(row = 8, column = 1, sticky = W)
+        Label(frame, text = "Correlation:").grid(row = 9, column = 1, sticky = W)
+        Label(frame, text = "Option Type:").grid(row = 10, column = 1, sticky = W)
+
         self.s0_1 = DoubleVar()
+        self.s0_1.set(100)
         self.s0_2 = DoubleVar()
+        self.s0_2.set(100)
         self.sigma_1 = DoubleVar()
+        self.sigma_1.set(0.3)
         self.sigma_2 = DoubleVar()
+        self.sigma_2.set(0.3)
         self.r = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
+        self.T.set(3)
         self.K = DoubleVar()
+        self.K.set(100)
         self.rho = DoubleVar()
+        self.rho.set(0.5)
         self.option_type = StringVar()
-        
 
-        entry_s0_1 = Entry(frame, textvariable = self.s0_1).grid(row = 2, column = 2, sticky = E)
-        entry_s0_2 = Entry(frame, textvariable = self.s0_2).grid(row = 3, column = 2, sticky = E)
-        entry_sigma_1 = Entry(frame, textvariable = self.sigma_1).grid(row = 4, column = 2, sticky = E)
-        entry_sigma_2 = Entry(frame, textvariable = self.sigma_2).grid(row = 5, column = 2, sticky = E)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 6, column = 2, sticky = E)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 7, column = 2, sticky = E)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 8, column = 2, sticky = E)
-        entry_rho = Entry(frame, textvariable = self.rho).grid(row = 9, column = 2, sticky = E)
-        
 
-        self.comboboxlist_task4 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task4)  
-        self.comboboxlist_task4.current(0)
-        self.comboboxlist_task4.grid(row = 10, column = 2, sticky = E)
-        
+        Entry(frame, textvariable = self.s0_1).grid(row = 2, column = 2, sticky = E)
+        Entry(frame, textvariable = self.s0_2).grid(row = 3, column = 2, sticky = E)
+        Entry(frame, textvariable = self.sigma_1).grid(row = 4, column = 2, sticky = E)
+        Entry(frame, textvariable = self.sigma_2).grid(row = 5, column = 2, sticky = E)
+        Entry(frame, textvariable = self.r).grid(row = 6, column = 2, sticky = E)
+        Entry(frame, textvariable = self.T).grid(row = 7, column = 2, sticky = E)
+        Entry(frame, textvariable = self.K).grid(row = 8, column = 2, sticky = E)
+        Entry(frame, textvariable = self.rho).grid(row = 9, column = 2, sticky = E)
 
-        btReset = Button(frame, width = 29, text = "Reset", command = self.ResetTask4).grid(row = 11, column = 1, columnspan = 1, sticky = E)
-        
 
-        btRun = Button(frame, width = 29, text = "Run", command = self.run_task4).grid(row = 11, column = 1, columnspan = 1, sticky = W)
-        
+        self.option_type_selector = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task4)
+        self.option_type_selector.current(0)
+        self.option_type_selector.grid(row = 10, column = 2, sticky = E)
+
+
+        Button(frame, width = 29, text = "Reset", command = self.reset_task4).grid(row = 11, column = 1, columnspan = 1, sticky = E)
+
+
+        Button(frame, width = 29, text = "Run", command = self.run_task4).grid(row = 11, column = 1, columnspan = 1, sticky = W)
+
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 9)
         self.logs.grid(row = 12, column = 1, rowspan = 4, columnspan = 2, sticky = W)
-    
+
 
     def task5(self):
-        
+
         frame = self.frames['pricer5']
-        self.__forgetFrame()
+        self.hide_all_frames()
         frame.pack()
 
-        label_title = Label(frame, text = "Arithmetic Asian Option from MC", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0 = Label(frame, text="S0").grid(row=2, column=1, sticky=E)
-        label_sigma = Label(frame, text="sigma").grid(row=2, column=3, sticky=E)
-        label_r = Label(frame, text="r").grid(row=3, column=1, sticky=E)
-        label_T = Label(frame, text="T").grid(row=3, column=3, sticky=E)
-        label_n = Label(frame, text="n").grid(row=4, column=1, sticky=E)
-        label_K = Label(frame, text="K").grid(row=4, column=3, sticky=E)
-        label_m = Label(frame, text="m").grid(row=5, column=1, sticky=E)
+        Label(frame, text = "Arithmetic Asian Option from MC", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text="S0").grid(row=2, column=1, sticky=E)
+        Label(frame, text="sigma").grid(row=2, column=3, sticky=E)
+        Label(frame, text="r").grid(row=3, column=1, sticky=E)
+        Label(frame, text="T").grid(row=3, column=3, sticky=E)
+        Label(frame, text="n").grid(row=4, column=1, sticky=E)
+        Label(frame, text="K").grid(row=4, column=3, sticky=E)
+        Label(frame, text="m").grid(row=5, column=1, sticky=E)
+
+
 
         self.s0 = DoubleVar()
+        self.s0.set(100)
         self.sigma = DoubleVar()
+        self.sigma.set(0.3)
         self.r = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
-        self.n = IntVar()
+        self.T.set(3)
         self.K = DoubleVar()
-        self.option_type = StringVar()
+        self.K.set(100)
+        self.n = IntVar()
+        self.n.set(50)
+
         self.m = IntVar()
-        self.ctrl_var = BooleanVar()
+        self.m.set(100000)
+        self.ctrl = BooleanVar()
+        self.option_type = StringVar()
 
-        entry_s0 = Entry(frame, width=15, textvariable=self.s0).grid(row=2, column=2, sticky=E)
-        entry_sigma = Entry(frame, textvariable=self.sigma).grid(row=2, column=4, sticky=E)
-        entry_r = Entry(frame, width=15,textvariable=self.r).grid(row=3, column=2, sticky=E)
-        entry_T = Entry(frame, textvariable=self.T).grid(row=3, column=4, sticky=E)
-        entry_n = Entry(frame, width=15, textvariable=self.n).grid(row=4, column=2, sticky=E)
-        entry_K = Entry(frame, textvariable=self.K).grid(row=4, column=4, sticky=E)
-        entry_m = Entry(frame, width=15, textvariable=self.m).grid(row=5, column=2, sticky=E)
+        Entry(frame, width=15, textvariable=self.s0).grid(row=2, column=2, sticky=E)
+        Entry(frame, textvariable=self.sigma).grid(row=2, column=4, sticky=E)
+        Entry(frame, width=15,textvariable=self.r).grid(row=3, column=2, sticky=E)
+        Entry(frame, textvariable=self.T).grid(row=3, column=4, sticky=E)
+        Entry(frame, width=15, textvariable=self.n).grid(row=4, column=2, sticky=E)
+        Entry(frame, textvariable=self.K).grid(row=4, column=4, sticky=E)
+        Entry(frame, width=15, textvariable=self.m).grid(row=5, column=2, sticky=E)
 
-        cbtCV = Checkbutton(frame, text="Control Variate?", variable=self.ctrl_var).grid(row=6, column=1, sticky=W)
+        Checkbutton(frame, text="Control Variate:", variable=self.ctrl).grid(row=6, column=1, sticky=W)
 
-        rbPut = Radiobutton(frame, width=6, text="Put", bg="red", variable=self.option_type, value='put').grid(row=6, column=2, sticky=E)
-        rbCall = Radiobutton(frame, width=6, text="Call", bg="yellow", variable=self.option_type, value='call').grid(row=6, column=3, sticky=W)
+        Radiobutton(frame, width=6, text="Put", variable=self.option_type, value='put').grid(row=6, column=2, sticky=E)
+        Radiobutton(frame, width=6, text="Call", variable=self.option_type, value='call').grid(row=6, column=3, sticky=W)
 
-        btRun = Button(frame, width=10, text="Run", command=self.run_task5).grid(row=7, column=1, columnspan=4)
+        Button(frame, width=10, text="Run", command=self.run_task5).grid(row=7, column=1, columnspan=4)
+        Button(frame, width=10, text="Reset", command=self.reset_task5).grid(row=7, column=1, columnspan=4, sticky=E)
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 16)
         self.logs.grid(row=8, column=1, columnspan=4)
-        
+
 
     def task6(self):
-        
+
         frame = self.frames['pricer6']
-        self.__forgetFrame()
+        self.hide_all_frames()
         frame.pack()
 
-        label_title = Label(frame, text = "Arithmetic Mean Bakset Option from MC", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0_1 = Label(frame, text="S0_1").grid(row=2, column=1, sticky=E)
-        label_s0_2 = Label(frame, text="S0_2").grid(row=2, column=3, sticky=E)
-        label_sigma_1 = Label(frame, text="sigma_1").grid(row=3, column=1, sticky=E)
-        label_sigma_2 = Label(frame, text="sigma_2").grid(row=3, column=3, sticky=E)
-        label_r = Label(frame, text="r").grid(row=4, column=1, sticky=E)
-        label_T = Label(frame, text="T").grid(row=4, column=3, sticky=E)
-        label_K = Label(frame, text="K").grid(row=5, column=1, sticky=E)
-        label_rho = Label(frame, text="rho").grid(row=5, column=3, sticky=E)
-        label_m = Label(frame, text="m").grid(row=6, column=1, sticky=E)
+        Label(frame, text = "Arithmetic Mean Bakset Option from MC", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text="S0_1").grid(row=2, column=1, sticky=E)
+        Label(frame, text="S0_2").grid(row=2, column=3, sticky=E)
+        Label(frame, text="sigma_1").grid(row=3, column=1, sticky=E)
+        Label(frame, text="sigma_2").grid(row=3, column=3, sticky=E)
+        Label(frame, text="r").grid(row=4, column=1, sticky=E)
+        Label(frame, text="T").grid(row=4, column=3, sticky=E)
+        Label(frame, text="K").grid(row=5, column=1, sticky=E)
+        Label(frame, text="rho").grid(row=5, column=3, sticky=E)
+        Label(frame, text="m").grid(row=6, column=1, sticky=E)
+
 
         self.s0_1 = DoubleVar()
+        self.s0_1.set(100)
         self.s0_2 = DoubleVar()
+        self.s0_2.set(100)
         self.sigma_1 = DoubleVar()
+        self.sigma_1.set(0.3)
         self.sigma_2 = DoubleVar()
+        self.sigma_2.set(0.3)
         self.r = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
+        self.T.set(3)
         self.K = DoubleVar()
+        self.K.set(100)
         self.rho = DoubleVar()
-        self.option_type = StringVar()
+        self.rho.set(0.5)
         self.m = IntVar()
-        self.ctrl_var = BooleanVar()
+        self.m.set(100000)
+        self.ctrl = BooleanVar()
+        self.option_type = StringVar()
 
-        entry_s0_1 = Entry(frame, width=16, textvariable=self.s0_1).grid(row=2, column=2, sticky=E)
-        entry_s0_2 = Entry(frame, width=20, textvariable=self.s0_2).grid(row=2, column=4, sticky=E)
-        entry_sigma_1 = Entry(frame, width=16, textvariable=self.sigma_1).grid(row=3, column=2, sticky=E)
-        entry_sigma_2 = Entry(frame, width=20, textvariable=self.sigma_2).grid(row=3, column=4, sticky=E)
-        entry_r = Entry(frame, width=16, textvariable=self.r).grid(row=4, column=2, sticky=E)
-        entry_T = Entry(frame, width=20, textvariable=self.T).grid(row=4, column=4, sticky=E)
-        entry_K = Entry(frame, width=16, textvariable=self.K).grid(row=5, column=2, sticky=E)
-        entry_rho = Entry(frame, width=20, textvariable=self.rho).grid(row=5, column=4, sticky=E)
-        entry_m = Entry(frame, width=16, textvariable=self.m).grid(row=6, column=2, sticky=E)
+        Entry(frame, width=16, textvariable=self.s0_1).grid(row=2, column=2, sticky=E)
+        Entry(frame, width=20, textvariable=self.s0_2).grid(row=2, column=4, sticky=E)
+        Entry(frame, width=16, textvariable=self.sigma_1).grid(row=3, column=2, sticky=E)
+        Entry(frame, width=20, textvariable=self.sigma_2).grid(row=3, column=4, sticky=E)
+        Entry(frame, width=16, textvariable=self.r).grid(row=4, column=2, sticky=E)
+        Entry(frame, width=20, textvariable=self.T).grid(row=4, column=4, sticky=E)
+        Entry(frame, width=16, textvariable=self.K).grid(row=5, column=2, sticky=E)
+        Entry(frame, width=20, textvariable=self.rho).grid(row=5, column=4, sticky=E)
+        Entry(frame, width=16, textvariable=self.m).grid(row=6, column=2, sticky=E)
 
-        cbtCV = Checkbutton(frame, text="Control Variate?", variable=self.ctrl_var).grid(row=7, column=1)
-        
-        rbPut = Radiobutton(frame, text="Put", bg="red", variable=self.option_type, value='put').grid(row=7, column=2)
-        rbCall = Radiobutton(frame, text="Call", bg="yellow", variable=self.option_type, value='call').grid(row=7, column=3)
+        Checkbutton(frame, text="Control Variate:", variable=self.ctrl).grid(row=7, column=1)
 
-        btRun = Button(frame, width=10, text="Run", command=self.run_task6).grid(row=8, column=1, columnspan=4)
+        Radiobutton(frame, text="Put",  variable=self.option_type, value='put').grid(row=7, column=2)
+        Radiobutton(frame, text="Call", variable=self.option_type, value='call').grid(row=7, column=3)
+
+        Button(frame, width=10, text="Run", command=self.run_task6).grid(row=8, column=1, columnspan=2, sticky=E)
+        Button(frame, width=10, text="Reset", command=self.reset_task6).grid(row=8, column=1, columnspan=4, sticky=E)
 
         self.logs = scrolledtext.ScrolledText(frame, height=14)
         self.logs.grid(row=9, column=1, columnspan=4)
-        
+
 
     def task7(self):
-        
+
         frame = self.frames['pricer7']
-        self.__forgetFrame()
+        self.hide_all_frames()
         frame.pack()
-        
 
-        label_title = Label(frame, text = "Implement the Binomial Tree Method for American Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_s0 = Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
-        label_sigma = Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
-        label_r = Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
-        label_T = Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
-        label_K = Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
-        label_N = Label(frame, text = "Number of Steps:").grid(row = 7, column = 1, sticky = W)
-        label_OptionType = Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
-        
+
+        Label(frame, text = "Binomial Tree Method for American Call/Put Options", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text = "Spot Price of Asset:").grid(row = 2, column = 1, sticky = W)
+        Label(frame, text = "Volatility:").grid(row = 3, column = 1, sticky = W)
+        Label(frame, text = "Risk-free Interest Rate:").grid(row = 4, column = 1, sticky = W)
+        Label(frame, text = "Time to Maturity (in years):").grid(row = 5, column = 1, sticky = W)
+        Label(frame, text = "Strike:").grid(row = 6, column = 1, sticky = W)
+        Label(frame, text = "Number of Steps:").grid(row = 7, column = 1, sticky = W)
+        Label(frame, text = "Option Type:").grid(row = 8, column = 1, sticky = W)
+
         self.s0 = DoubleVar()
+        self.s0.set(100)
         self.sigma = DoubleVar()
+        self.sigma.set(0.3)
         self.r = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
+        self.T.set(3)
         self.K = DoubleVar()
+        self.K.set(100)
         self.N = IntVar()
+        self.N.set(36)
         self.option_type = StringVar()
-        
 
-        entry_s0 = Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
-        entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = W)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = W)
-        entry_N = Entry(frame, textvariable = self.N).grid(row = 7, column = 2, sticky = W)
-        
 
-        self.comboboxlist_task7 = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task7)  
-        self.comboboxlist_task7.current(0)
-        self.comboboxlist_task7.grid(row = 8, column = 2, sticky = W)
-        
+        Entry(frame, textvariable = self.s0).grid(row = 2, column = 2, sticky = W)
+        Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = W)
+        Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = W)
+        Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = W)
+        Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = W)
+        Entry(frame, textvariable = self.N).grid(row = 7, column = 2, sticky = W)
 
-        btReset = Button(frame, width = 10, text = "Reset", command = self.ResetTask7).grid(row = 9, column = 2, columnspan = 1, sticky = E)
-        
 
-        btRun = Button(frame, width = 10, text = "Run", command = self.run_task7).grid(row = 9, column = 2, columnspan = 1, sticky = W)
-        
+        self.option_type_selector = ttk.Combobox(frame, width = 17, values = ("Select Option Type", "Call Option", "Put Option"), textvariable = self.option_type, postcommand = self.run_task7)
+        self.option_type_selector.current(0)
+        self.option_type_selector.grid(row = 8, column = 2, sticky = W)
+
+
+        Button(frame, width = 10, text = "Reset", command = self.reset_task7).grid(row = 9, column = 2, columnspan = 1, sticky = E)
+
+
+        Button(frame, width = 10, text = "Run", command = self.run_task7).grid(row = 9, column = 2, columnspan = 1, sticky = W)
+
 
         self.logs = scrolledtext.ScrolledText(frame, width = 74, height = 12)
         self.logs.grid(row = 10, column = 1, rowspan = 4, columnspan = 2, sticky = W)
 
-    # Implement the Quasi Monte Carlo method for for a KIKO-put option.
+    #  the Quasi Monte Carlo method for for a KIKO-put option.
     def task8(self):
-        
-        frame = self.frames['pricer6']
-        self.__forgetFrame()
+
+        frame = self.frames['pricer8']
+        self.hide_all_frames()
         frame.pack()
 
-        label_title = Label(frame, text = "KIKO-put option from MC", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
-        label_S = Label(frame, text="S").grid(row=2, column=1, sticky=E)
-        label_sigma = Label(frame, text="sigma").grid(row=3, column=3, sticky=E)
-        label_r = Label(frame, text="r").grid(row=4, column=1, sticky=E)
-        label_T = Label(frame, text="T").grid(row=5, column=1, sticky=E)
-        label_K = Label(frame, text="K").grid(row=6, column=1, sticky=E)
-        label_barrier_lower = Label(frame, text="barrier_lower").grid(row=7, column=1, sticky=E)
-        label_barrier_upper = Label(frame, text="barrier_upper").grid(row=8, column=1, sticky=E)
-        label_N = Label(frame, text="N").grid(row=9, column=1, sticky=E)
-        label_R = Label(frame, text="R").grid(row=10, column=1, sticky=E)
+        Label(frame, text = "KIKO-put option from MC", fg = "red", justify = "right").grid(row = 1, column = 1,sticky = W)
+        Label(frame, text="Spot Price of Asset:").grid(row=2, column=1, sticky=W)
+        Label(frame, text="Volatility:").grid(row=3, column=1, sticky=W)
+        Label(frame, text="Risk-free Interest Rate:").grid(row=4, column=1, sticky=W)
+        Label(frame, text="Time to Maturity (in years):").grid(row=5, column=1, sticky=W)
+        Label(frame, text="Strike:").grid(row=6, column=1, sticky=W)
+        Label(frame, text="Barrier Lower").grid(row=7, column=1, sticky=W)
+        Label(frame, text="Barrier Upper").grid(row=8, column=1, sticky=W)
+        Label(frame, text="Number of Observations").grid(row=9, column=1, sticky=W)
+        Label(frame, text="Cash Rebate").grid(row=10, column=1, sticky=W)
 
         self.S = DoubleVar()
+        self.S.set(100)
         self.sigma = DoubleVar()
+        self.sigma.set(0.2)
         self.r = DoubleVar()
+        self.r.set(0.05)
         self.T = DoubleVar()
+        self.T.set(2)
         self.K = DoubleVar()
+        self.K.set(100)
         self.barrier_lower = DoubleVar()
+        self.barrier_lower.set(80)
         self.barrier_upper = DoubleVar()
-        self.N = DoubleVar()
+        self.barrier_upper.set(125)
+        self.N = IntVar()
+        self.N.set(24)
         self.R = DoubleVar()
+        self.R.set(1.5)
 
-        entry_S = Entry(frame, textvariable = self.S).grid(row = 2, column = 2, sticky = E)
-        entry_sigma = Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = E)
-        entry_r = Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = E)
-        entry_T = Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
-        entry_K = Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
-        entry_barrier_lower = Entry(frame, textvariable = self.barrier_lower).grid(row = 7, column = 2, sticky = E)
-        entry_barrier_upper = Entry(frame, textvariable = self.barrier_upper).grid(row = 8, column = 2, sticky = E)
-        entry_N = Entry(frame, textvariable = self.N).grid(row = 9, column = 2, sticky = E)
-        entry_R = Entry(frame, textvariable = self.R).grid(row = 10, column = 2, sticky = E)
 
-        btRun = Button(frame, width=10, text="Run", command=self.run_task8).grid(row=12, column=1, columnspan=4)
+        Entry(frame, textvariable = self.S).grid(row = 2, column = 2, sticky = E)
+        Entry(frame, textvariable = self.sigma).grid(row = 3, column = 2, sticky = E)
+        Entry(frame, textvariable = self.r).grid(row = 4, column = 2, sticky = E)
+        Entry(frame, textvariable = self.T).grid(row = 5, column = 2, sticky = E)
+        Entry(frame, textvariable = self.K).grid(row = 6, column = 2, sticky = E)
+        Entry(frame, textvariable = self.barrier_lower).grid(row = 7, column = 2, sticky = E)
+        Entry(frame, textvariable = self.barrier_upper).grid(row = 8, column = 2, sticky = E)
+        Entry(frame, textvariable = self.N).grid(row = 9, column = 2, sticky = E)
+        Entry(frame, textvariable = self.R).grid(row = 10, column = 2, sticky = E)
+
+        Button(frame, width=10, text="Reset", command=self.reset_task7).grid(row=12, column=1, columnspan=2, sticky=E)
+        Button(frame, width=10, text="Run", command=self.run_task8).grid(row=12, column=1, columnspan=1, sticky=E)
 
         self.logs = scrolledtext.ScrolledText(frame, height=14)
         self.logs.grid(row=13, column=1, columnspan=4)
 
+
     def run_homepage(self):
         
-        self.__forgetFrame()
+        self.hide_all_frames()
         self.frames['home'].pack()
         
     def run_task1(self):
@@ -544,17 +588,9 @@ class OptionPricerGUI:
             
             pass
         
-        self.comboboxlist_task1.current(0)
+        self.option_type_selector.current(0)
             
-    def ResetTask1(self):
-        
-        self.s0 = 0
-        self.sigma = 0
-        self.r = 0
-        self.repo = 0
-        self.T = 0
-        self.K = 0
-        
+    def reset_task1(self):
         self.task1()
         
     def run_task2(self):
@@ -565,7 +601,7 @@ class OptionPricerGUI:
             
             try:
   
-                result = Newton_Raphson4Ivolatility(S = self.s0.get(), r = self.r.get(), q = self.q.get(), T = self.T.get(), K = self.K.get(), C_true = self.V.get(), call=True)
+                result = Newton_Raphson4Ivolatility(S = self.s0.get(), r = self.r.get(), q = self.q.get(), T = self.T.get(), K = self.K.get(), C_true = self.OP.get(), call=True)
                
                 
                 if math.isnan(result) or math.isinf(result):
@@ -584,7 +620,7 @@ class OptionPricerGUI:
             
             try:
             
-                result = Newton_Raphson4Ivolatility(S = self.s0.get(), r = self.r.get(), q = self.q.get(), T = self.T.get(), K = self.K.get(), C_true = self.V.get(), call=False)
+                result = Newton_Raphson4Ivolatility(S = self.s0.get(), r = self.r.get(), q = self.q.get(), T = self.T.get(), K = self.K.get(), C_true = self.OP.get(), call=False)
                 
                 if math.isnan(result) or math.isinf(result):
                     
@@ -598,16 +634,9 @@ class OptionPricerGUI:
                 
                 self.logs.insert(END, "Input Parameter Error! Please input the correct parameters!\n")
                 
-        self.comboboxlist_task2.current(0)
+        self.option_type_selector.current(0)
             
-    def ResetTask2(self):
-                
-        self.s0 = 0
-        self.sigma = 0
-        self.r = 0
-        self.T = 0
-        self.K = 0
-        self.N = 0
+    def reset_task2(self):
         
         self.task2()
         
@@ -652,16 +681,9 @@ class OptionPricerGUI:
                 
                 self.logs.insert(END, "Input Parameter Error! Please input the correct parameters!\n")
                 
-        self.comboboxlist_task3.current(0)
+        self.option_type_selector.current(0)
         
-    def ResetTask3(self):
-                
-        self.s0 = 0
-        self.sigma = 0
-        self.r = 0
-        self.T = 0
-        self.K = 0
-        self.n = 0
+    def reset_task3(self):
         
         self.task3()
         
@@ -710,41 +732,43 @@ class OptionPricerGUI:
                 
                 self.logs.insert(END, "Input Parameter Error! Please input the correct parameters!\n")
                 
-        self.comboboxlist_task4.current(0)
+        self.option_type_selector.current(0)
     
-    def ResetTask4(self):
-                
-        self.s0_1 = 0
-        self.s0_2 = 0
-        self.sigma_1 = 0
-        self.sigma_2 = 0
-        self.r = 0
-        self.T = 0
-        self.K = 0
-        self.rho = 0
+    def reset_task4(self):
         
         self.task4()
         
     def run_task5(self):
-        
-        self.logs.insert(END, "waiting.... [It may take you several minutes]\n")
-
+        if self.ctrl.get():
+            cv = 'control variate'
+        else:
+            cv = ''
         result = arithmetic_asia_option(S0=self.s0.get(), sigma=self.sigma.get(), r=self.r.get(),
                                     T=self.T.get(), K=self.K.get(), n=self.n.get(), M=self.m.get(), 
-                                    option_type=self.option_type.get(), cv=self.ctrl_var.get())
+                                    option_type=self.option_type.get(), cv=cv)
         self.logs.insert(END, "The option premium is: {}\n".format(result))
 
+    def reset_task5(self):
+
+        self.task5()
+
     def run_task6(self):
-        
-        self.logs.insert(END, "waiting.... [It may take you several minutes]\n\n")
+        if self.ctrl.get():
+            cv = 'control variate'
+        else:
+            cv = ''
 
         result = arithmetic_bascket_option(S1=self.s0_1.get() ,S2=self.s0_2.get(), sigma1=self.sigma_1.get(),
                                      sigma2=self.sigma_2.get(), r=self.r.get(), T=self.T.get(), K=self.K.get(),
                                      rho=self.rho.get(),option_type=self.option_type.get(),M=self.m.get(),
-                                     cv=self.ctrl_var.get())
+                                     cv=cv)
         
         self.logs.insert(END, "The put option premium is: {}\n".format(result))
-        
+
+    def reset_task6(self):
+
+        self.task6()
+
     def run_task7(self):
         
         OptionType = self.option_type.get()
@@ -776,16 +800,9 @@ class OptionPricerGUI:
             
             pass
         
-        self.comboboxlist_task7.current(0)
+        self.option_type_selector.current(0)
     
-    def ResetTask7(self):
-                
-        self.s0 = 0
-        self.sigma = 0
-        self.r = 0
-        self.T = 0
-        self.K = 0
-        self.N = 0
+    def reset_task7(self):
         
         self.task7()
 
@@ -793,10 +810,14 @@ class OptionPricerGUI:
         
         self.logs.insert(END, "waiting.... [It may take you several minutes]\n\n")
 
-        result = Quasi_Monte_Carlo(S = self.S.get(), K= self.K.get(), T= self.T.get(), r= self.r.get(), sigma= self.sigma.get(), N= self.N.get(), 
+        result = Quasi_Monte_Carlo(S = self.S.get(), K= self.K.get(), T= self.T.get(), r= self.r.get(), sigma= self.sigma.get(), N= self.N.get(),
                                    R= self.R.get(), barrier_lower= self.barrier_lower.get(), barrier_upper= self.barrier_upper.get(), is_reversed = False)
         
-        self.logs.insert(END, "The put option premium is: {}\n".format(result))   
+        self.logs.insert(END, "The put option premium is: {}, the upper bound is {} and the lower bound is {}\n".format(result[0], result[1], result[2]))
+
+    def reset_task8(self):
+
+        self.task8()
 
     def Quit(self):
         
