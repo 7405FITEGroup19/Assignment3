@@ -4,18 +4,19 @@ import numpy as np
 import cupy as cp
 from Geometric_basket_option_pricer import geometric_bascket_option
 
+
 def arithmetic_bascket_option(S1, S2, sigma1, sigma2, r, T, K, rho, option_type, M, cv):
     value_geo = geometric_bascket_option(S1, S2, sigma1, sigma2, r, T, K, rho, option_type)
     Spath1 = cp.zeros(M)
     Spath2 = cp.zeros(M)
     cp.random.seed(1)
-    x = cp.random.normal(loc=0, scale=1, size=2*M)
+    x = cp.random.normal(loc=0, scale=1, size=2 * M)
     Z1 = x[:M]
-    Z2 = rho * x[:M] + cp.sqrt(1 - rho**2) * x[M:]
-    
+    Z2 = rho * x[:M] + cp.sqrt(1 - rho ** 2) * x[M:]
+
     for i in range(M):
-        Spath1[i] = S1 * cp.exp((r - 0.5 * sigma1**2) * T + sigma1 * cp.sqrt(T) * Z1[i])
-        Spath2[i] = S2 * cp.exp((r - 0.5 * sigma2**2) * T + sigma2 * cp.sqrt(T) * Z2[i])
+        Spath1[i] = S1 * cp.exp((r - 0.5 * sigma1 ** 2) * T + sigma1 * cp.sqrt(T) * Z1[i])
+        Spath2[i] = S2 * cp.exp((r - 0.5 * sigma2 ** 2) * T + sigma2 * cp.sqrt(T) * Z2[i])
 
     arithpayoff = cp.zeros(M)
     geopayoff = cp.zeros(M)
@@ -49,7 +50,7 @@ def arithmetic_bascket_option(S1, S2, sigma1, sigma2, r, T, K, rho, option_type,
     else:
         Pmean = cp.mean(arithpayoff)
         Pstd = cp.std(arithpayoff)
-        conf = Pmean - 1.96 * Pstd / cp.sqrt(M), Pmean + 1.96 * Pstd / cp.sqrt(M)]
+        conf = [Pmean - 1.96 * Pstd / cp.sqrt(M), Pmean + 1.96 * Pstd / cp.sqrt(M)]
 
-    # Convert the result back to NumPy array before returning
-    return cp.asnumpy(conf)
+        # Convert the result back to NumPy array before returning
+        return conf
